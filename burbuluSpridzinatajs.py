@@ -155,6 +155,6 @@ a.create_text(VID_X, VID_Y + 30, \
 
 a.create_text(VID_X, VID_Y + 45, \
               text="Papildu laiks: " + str(papildu * LAIKA_IEROBEZOJUMS), fill="white")
-
+pygame.quit()
 
 input()
