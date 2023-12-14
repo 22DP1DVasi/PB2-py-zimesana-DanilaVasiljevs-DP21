@@ -2,8 +2,11 @@
 
 from tkinter import *
 from random import randint
-from time import sleep
+from time import sleep, time
 from math import sqrt
+import pygame
+
+pygame.init()
 
 # 1. solis
 GARUMS = 500
@@ -52,6 +55,8 @@ MAX_BURB_R = 30
 MAX_BURB_ATR = 10
 ATSTARPE = 100
 
+BURBULU_SKANA = pygame.mixer.Sound("411642__inspectorj__pop-high-a-h1.wav")
+
 def izveidot_burbuli():
     x = PLATUMS + ATSTARPE
     y = randint(0, GARUMS)
@@ -63,14 +68,14 @@ def izveidot_burbuli():
 
 # 5. solis
 def parvietot_burbulus():
-    for i in range(len(burb_id)):               # pārskata katru saraksta burbuļu
+    for i in range(len(burb_id)):         # pārskata katru saraksta burbuļu
         a.move(burb_id[i], -burb_atrums[i], 0)
 
 # 7. solis
 def iegut_koord(id_skaitlis):
     poz = a.coords(id_skaitlis)
     x = (poz[0] + poz[2]) / 2
-    y = (poz[1] + poz[3]) / 2
+    y = (poz[1] + poz[3]) / 2   # centra koordinātas
     return x, y
 
 # 8. solis
@@ -97,26 +102,59 @@ def attalums(id1, id2):
 def sadursme():
     punkti = 0
     for burb in range(len(burb_id)-1, -1, -1):
-        if attalums(kuga_id2, burb_id[burb]) < (KUGA_R + burb_r[burb]):
+        if attalums(kuga_id2, burb_id[burb]) < (KUGA_R + burb_r[burb]): # ja attālums no figūru centriem ir mazāks nekā abu rādiusu summa
             punkti += (burb_r[burb] + burb_atrums[burb])
             dzest_burbuli(burb)
+            BURBULU_SKANA.play()
     return punkti
 
 # 14. solis
 a.create_text(50, 30, text="LAIKS", fill="white")
 a.create_text(150, 30, text="REZULTĀTS", fill="white")
+laiks_teksts = a.create_text(50, 50, fill="white")
+rezultats_teksts = a.create_text(150, 50, fill="white")
 
+def paradit_rezultatu(rezultats):
+    a.itemconfig(rezultats_teksts, text=str(rezultats))
+
+def paradit_laiku(laiks_palicis):
+    a.itemconfig(laiks_teksts, text=str(laiks_palicis))
+
+
+# 15. solis
 BURB_NEJAUSI = 10
+LAIKA_IEROBEZOJUMS = 30
+PAPILDLAIKA_REZ = 1000
+
 rezultats = 0
+papildu = 0
+beigas = time() + LAIKA_IEROBEZOJUMS
+
 # SPĒLES GALVENAIS CIKLS
-while True:
+while time() < beigas:
     if randint(1, BURB_NEJAUSI) == 1:
         izveidot_burbuli()
     parvietot_burbulus()
     notirit_burbulus()
     rezultats += sadursme()
-    print(rezultats)
+    if (int(rezultats / PAPILDLAIKA_REZ)) > papildu:
+        papildu += 1
+        beigas += LAIKA_IEROBEZOJUMS
+    
+    paradit_rezultatu(rezultats)
+    paradit_laiku(int(beigas - time()))
     logs.update()   # atjauno logu, lai no jauna uzzīmētu burbuļus
     sleep(0.01)
+
+# 17. solis
+a.create_text(VID_X, VID_Y, \
+              text="SPĒLES BEIGAS", fill="white", font=("Helvetica", 30))
+
+a.create_text(VID_X, VID_Y + 30, \
+              text="Rezultāts: " + str(rezultats), fill="white")
+
+a.create_text(VID_X, VID_Y + 45, \
+              text="Papildu laiks: " + str(papildu * LAIKA_IEROBEZOJUMS), fill="white")
+
 
 input()
