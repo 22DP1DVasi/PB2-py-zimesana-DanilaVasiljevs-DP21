@@ -4,32 +4,43 @@ from tkinter import *
 from random import randint
 from time import sleep, time
 from math import sqrt
-import pygame
+#import pygame
 
-pygame.init()
+#pygame.init()
 
 # 1. solis
 GARUMS = 500
 PLATUMS = 800   # loga izmēri
+
+burb_id = list()          # saraksts burbuļu ID
+burb_r = list()           # saraksts burbuļu rādiusiem
+burb_atrums = list()      # saraksts burbuļu ātrumiem
+MIN_BURB_R = 10
+MAX_BURB_R = 30
+MAX_BURB_ATR = 10
+ATSTARPE = 100
+
+#BURBULU_SKANA = pygame.mixer.Sound("411642__inspectorj__pop-high-a-h1.wav")
+
+# 2. solis
+KUGA_R = 15     # zemūdenes rādiuss
+VID_X = PLATUMS / 2
+VID_Y = GARUMS / 2      # ekrāna centra koordinātas
+
+KUGA_ATR = 10   # zemūdenes ātrums
 
 logs = Tk()
 logs.title("Burbuļu spridzinātājs.")
 a = Canvas(logs, width=PLATUMS, height=GARUMS, bg="darkblue")
 a.pack()
 
-# 2. solis
 kuga_id = a.create_polygon(5, 5, 5, 25, 30, 15, fill="red") # zemūdenes trijstūris
 kuga_id2 = a.create_oval(0, 0, 30, 30, outline="red")       # zemūdenes riņķa līnijas
-KUGA_R = 15     # zemūdenes rādiuss
-VID_X = PLATUMS / 2
-VID_Y = GARUMS / 2      # ekrāna centra koordinātas
 
 a.move(kuga_id, VID_X, VID_Y)
 a.move(kuga_id2, VID_X, VID_Y)  # pārvieto abas zemūdenes daļas uz ekrāna centru
 
 # 3. solis
-KUGA_ATR = 10   # zemūdenes ātrums
-
 def parvietot_kugi(notikums):
     if notikums.keysym == "Up":         # uz augšu
         a.move(kuga_id, 0, -KUGA_ATR)
@@ -47,16 +58,6 @@ def parvietot_kugi(notikums):
 a.bind_all("<Key>", parvietot_kugi)
 
 # 4. solis
-burb_id = list()          # saraksts burbuļu ID
-burb_r = list()           # saraksts burbuļu rādiusiem
-burb_atrums = list()      # saraksts burbuļu ātrumiem
-MIN_BURB_R = 10
-MAX_BURB_R = 30
-MAX_BURB_ATR = 10
-ATSTARPE = 100
-
-BURBULU_SKANA = pygame.mixer.Sound("411642__inspectorj__pop-high-a-h1.wav")
-
 def izveidot_burbuli():
     x = PLATUMS + ATSTARPE
     y = randint(0, GARUMS)
@@ -105,7 +106,7 @@ def sadursme():
         if attalums(kuga_id2, burb_id[burb]) < (KUGA_R + burb_r[burb]): # ja attālums no figūru centriem ir mazāks nekā abu rādiusu summa
             punkti += (burb_r[burb] + burb_atrums[burb])
             dzest_burbuli(burb)
-            BURBULU_SKANA.play()
+            #BURBULU_SKANA.play()
     return punkti
 
 # 14. solis
@@ -147,14 +148,10 @@ while time() < beigas:
     sleep(0.01)
 
 # 17. solis
-a.create_text(VID_X, VID_Y, \
-              text="SPĒLES BEIGAS", fill="white", font=("Helvetica", 30))
+a.create_text(VID_X, VID_Y, text="SPĒLES BEIGAS", fill="white", font=("Helvetica", 30))
+a.create_text(VID_X, VID_Y + 30, text="Rezultāts: " + str(rezultats), fill="white")
+a.create_text(VID_X, VID_Y + 45, text="Papildu laiks: " + str(papildu * LAIKA_IEROBEZOJUMS), fill="white")
 
-a.create_text(VID_X, VID_Y + 30, \
-              text="Rezultāts: " + str(rezultats), fill="white")
-
-a.create_text(VID_X, VID_Y + 45, \
-              text="Papildu laiks: " + str(papildu * LAIKA_IEROBEZOJUMS), fill="white")
-pygame.quit()
+#pygame.quit()
 
 input()
