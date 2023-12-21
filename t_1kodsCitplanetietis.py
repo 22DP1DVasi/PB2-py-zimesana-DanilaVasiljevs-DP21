@@ -81,4 +81,4 @@ def acs_vadiba(notikums):
 
 a.bind_all("<Key>", acs_vadiba)
 
-#input()
+input()
