@@ -4,9 +4,9 @@ from tkinter import *
 from random import randint
 from time import sleep, time
 from math import sqrt
-#import pygame
+import pygame
 
-#pygame.init()
+pygame.init()
 
 # 1. solis
 GARUMS = 500
@@ -20,7 +20,7 @@ MAX_BURB_R = 30
 MAX_BURB_ATR = 10
 ATSTARPE = 100
 
-#BURBULU_SKANA = pygame.mixer.Sound("411642__inspectorj__pop-high-a-h1.wav")
+BURBULU_SKANA = pygame.mixer.Sound("411642__inspectorj__pop-high-a-h1.wav")
 
 # 2. solis
 KUGA_R = 15     # zemūdenes rādiuss
@@ -106,7 +106,7 @@ def sadursme():
         if attalums(kuga_id2, burb_id[burb]) < (KUGA_R + burb_r[burb]): # ja attālums no figūru centriem ir mazāks nekā abu rādiusu summa
             punkti += (burb_r[burb] + burb_atrums[burb])
             dzest_burbuli(burb)
-            #BURBULU_SKANA.play()
+            BURBULU_SKANA.play()
     return punkti
 
 # 14. solis
@@ -152,6 +152,6 @@ a.create_text(VID_X, VID_Y, text="SPĒLES BEIGAS", fill="white", font=("Helvetic
 a.create_text(VID_X, VID_Y + 30, text="Rezultāts: " + str(rezultats), fill="white")
 a.create_text(VID_X, VID_Y + 45, text="Papildu laiks: " + str(papildu * LAIKA_IEROBEZOJUMS), fill="white")
 
-#pygame.quit()
+pygame.quit()
 
 input()
